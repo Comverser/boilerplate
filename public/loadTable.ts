@@ -1,13 +1,28 @@
-const excel_file = document.getElementById("excel_file");
+declare const XLSX: any;
 
-excel_file.addEventListener("change", (event) => {
+const excel_file = <HTMLInputElement>document.getElementById("excel_file");
+
+const exportToJsonFile = (jsonData: object) => {
+  let dataStr = JSON.stringify(jsonData);
+  let dataUri =
+    "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+
+  let exportFileDefaultName = "data.json";
+
+  let linkElement = document.createElement("a");
+  linkElement.setAttribute("href", dataUri);
+  linkElement.setAttribute("download", exportFileDefaultName);
+  linkElement.click();
+}
+
+excel_file.addEventListener("change", (event: Event) => {
   if (
     ![
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       "application/vnd.ms-excel",
-    ].includes(event.target.files[0].type)
+    ].includes((event.target as HTMLInputElement).files![0].type)
   ) {
-    document.getElementById("excel_data").innerHTML =
+    (<HTMLDivElement>document.getElementById("excel_data")).innerHTML =
       '<div class="alert alert-danger">Only .xlsx or .xls file format are allowed</div>';
 
     excel_file.value = "";
@@ -16,19 +31,16 @@ excel_file.addEventListener("change", (event) => {
   }
 
   var reader = new FileReader();
-
-  reader.readAsArrayBuffer(event.target.files[0]);
-
-  reader.onload = function (event) {
-    var data = new Uint8Array(reader.result);
-
+  reader.readAsArrayBuffer((event.target as HTMLInputElement).files![0]);
+  reader.onload = function (event: Event) {
+    var data = new Uint8Array(reader.result as Uint8Array);
     var work_book = XLSX.read(data, { type: "array" });
-
     var sheet_name = work_book.SheetNames;
-
     var sheet_data = XLSX.utils.sheet_to_json(work_book.Sheets[sheet_name[0]], {
       header: 1,
     });
+
+    // exportToJsonFile(sheet_data);
 
     if (sheet_data.length > 0) {
       var table_output = '<table class="table table-striped table-bordered">';
@@ -43,15 +55,13 @@ excel_file.addEventListener("change", (event) => {
             table_output += "<td>" + sheet_data[row][cell] + "</td>";
           }
         }
-
         table_output += "</tr>";
       }
-
       table_output += "</table>";
 
-      document.getElementById("excel_data").innerHTML = table_output;
+      (<HTMLDivElement>document.getElementById("excel_data")).innerHTML =
+        table_output;
     }
-
     excel_file.value = "";
   };
 });

@@ -1,16 +1,18 @@
 import express from "express";
 import router from "./routes/routes";
-import helmet from "helmet";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // express app
 const app = express();
+const port = process.env.PORT || 3000;
 
 // middleware and static files
-app.use(helmet());
 app.use(express.static("public"));
 
 app.use(router);
 
-app.listen(3000, () => {
-  console.log(`Application listening at http://localhost:3000`);
+app.listen(port, () => {
+  console.log(`Application listening at http://localhost:${port}`);
 });

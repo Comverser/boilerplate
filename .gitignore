@@ -1,1 +1,10 @@
 node_modules
+
+*.js
+!_*.js
+
+# API keys and secrets
+.env
+
+# ignore yarn.lock
+yarn.lock

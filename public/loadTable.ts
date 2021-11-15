@@ -2,6 +2,33 @@ declare const XLSX: any;
 
 const excel_file = <HTMLInputElement>document.getElementById("excel_file");
 
+const fetchJson = (jsonData: object) => {
+  fetch("http://localhost:3000/api/params", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(jsonData),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      const { hv, lv, dthv, dtlv, slope } = data;
+      let pSlope = document.getElementById("slope");
+      let pHv = document.getElementById("hv");
+      let pDthv = document.getElementById("dthv");
+      let pLv = document.getElementById("lv");
+      let pDtlv = document.getElementById("dtlv");
+      pSlope!.textContent = JSON.stringify(slope);
+      pHv!.textContent = JSON.stringify(hv);
+      pDthv!.textContent = JSON.stringify(dthv);
+      pLv!.textContent = JSON.stringify(lv);
+      pDtlv!.textContent = JSON.stringify(dtlv);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
+
 const exportToJsonFile = (jsonData: object) => {
   let dataStr = JSON.stringify(jsonData);
   let dataUri =
@@ -13,7 +40,7 @@ const exportToJsonFile = (jsonData: object) => {
   linkElement.setAttribute("href", dataUri);
   linkElement.setAttribute("download", exportFileDefaultName);
   linkElement.click();
-}
+};
 
 excel_file.addEventListener("change", (event: Event) => {
   if (
@@ -40,7 +67,7 @@ excel_file.addEventListener("change", (event: Event) => {
       header: 1,
     });
 
-    // exportToJsonFile(sheet_data);
+    fetchJson(sheet_data);
 
     if (sheet_data.length > 0) {
       var table_output = '<table class="table table-striped table-bordered">';

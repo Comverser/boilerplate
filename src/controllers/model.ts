@@ -1,4 +1,6 @@
-let tf = require("@tensorflow/tfjs-node-gpu");
+const tf = require("@tensorflow/tfjs");
+const tfn = require("@tensorflow/tfjs-node");
+// require("@tensorflow/tfjs-node-gpu");
 
 let lifeArr = [];
 const slopeArr = [
@@ -27,9 +29,30 @@ let compileParam = {
 };
 model.compile(compileParam);
 
-let fitParam = { epochs: 10000 };
+// let fitParam = {
+//   epochs: 10000,
+//   callbacks: {
+//     onEpochEnd: (epoch: any, logs: any) => console.log("epoch", epoch, logs),
+//   },
+// };
 
-model.fit(tfSlope, tfLife, fitParam).then((result: any) => {
-  let predictResult = model.predict(tfSlope);
-  predictResult.print();
-});
+// model.fit(tfSlope, tfLife, fitParam).then((result: any) => {
+//   let predictResult = model.predict(tfSlope);
+//   predictResult.print();
+//   console.log(predictResult.arraySync()[0][0]);
+
+//   let weights = model.getWeights();
+//   let weight = weights[0].arraySync()[0][0];
+//   let bias = weights[1].arraySync()[0];
+//   console.log(weight, bias, weight * slopeArr[0] + bias);
+
+//   model.save("file://./model");
+// });
+
+const loadModel = async () => {
+  const handler = tfn.io.fileSystem("./model/model.json");
+  const model = await tf.loadLayersModel(handler);
+  console.log("Model loaded");
+  model.predict(tfSlope);
+  model.print();
+};

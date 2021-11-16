@@ -1,13 +1,23 @@
 declare const XLSX: any;
 declare const tf: any;
 
+const testInput = <HTMLInputElement>document.getElementById("test-input");
+const testBtn = document.getElementById("test-btn");
+const arbitraryCompensation: number = 27;
+
+testBtn!.addEventListener("click", (e) => {
+  const slope: number = +testInput.value;
+  modelPred(-slope);
+});
+
 const modelPred = (input: number) => {
   return tf
     .loadLayersModel("http://localhost:3000/model/model.json")
     .then((model: any) => {
       const pred = model.predict(tf.tensor([input]));
-      let output: number = Math.round(pred.dataSync()[0]);
-      if (output < 0) {
+      let output: number =
+        Math.round(pred.dataSync()[0]) + arbitraryCompensation;
+      if (output < arbitraryCompensation) {
         output = 0;
       }
       const result: string = output.toString();

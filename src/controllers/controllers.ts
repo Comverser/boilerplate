@@ -79,10 +79,35 @@ const getParams = (req: Request, res: Response) => {
   params["dthv"] = dthv;
   params["dtlv"] = dtlv;
   params["slope"] = slope;
+  params["input"] = slope * 1000000;
 
-  fs.writeFileSync(path.join(__dirname, "..", "/params.json"), JSON.stringify(params));
+  fs.writeFileSync(
+    path.join(__dirname, "..", "/params.json"),
+    JSON.stringify(params)
+  );
 
   res.json(params);
+};
+
+const getModel = (req: Request, res: Response) => {
+  // const model = JSON.parse(
+  //   fs.readFileSync(path.join(__dirname, "..", "/model/model.json")).toString()
+  // );
+
+  // const readJson = fs
+  //   .readFileSync(path.join(__dirname, "..", "/model/model.json"))
+  //   .toString();
+
+  // const readBin = fs
+  //   .readFileSync(path.join(__dirname, "..", "/model/weights.bin"))
+  //   .toString();
+
+  // const model = {
+  //   json: readJson,
+  //   bin: readBin,
+  // };
+
+  // res.json(model);
 };
 
 const getTest = (req: Request, res: Response) => {
@@ -94,4 +119,4 @@ const postTest = (req: Request, res: Response) => {
   res.send("Hello");
 };
 
-export default { index, getParams, getTest, postTest };
+export default { index, getParams, getModel, getTest, postTest };

@@ -1,4 +1,20 @@
 declare const XLSX: any;
+declare const tf: any;
+
+const modelPred = (input: number) => {
+  return tf
+    .loadLayersModel("http://localhost:3000/model/model.json")
+    .then((model: any) => {
+      const pred = model.predict(tf.tensor([input]));
+      let output: number = Math.round(pred.dataSync()[0]);
+      if (output < 0) {
+        output = 0;
+      }
+      const result: string = output.toString();
+      const p = document.getElementById("predict");
+      p!.textContent = result;
+    });
+};
 
 const excel_file = <HTMLInputElement>document.getElementById("excel_file");
 
@@ -12,7 +28,7 @@ const fetchJson = (jsonData: object) => {
   })
     .then((res) => res.json())
     .then((data) => {
-      const { hv, lv, dthv, dtlv, slope } = data;
+      const { hv, lv, dthv, dtlv, slope, input } = data;
       let pSlope = document.getElementById("slope");
       let pHv = document.getElementById("hv");
       let pDthv = document.getElementById("dthv");
@@ -23,6 +39,9 @@ const fetchJson = (jsonData: object) => {
       pDthv!.textContent = JSON.stringify(dthv);
       pLv!.textContent = JSON.stringify(lv);
       pDtlv!.textContent = JSON.stringify(dtlv);
+
+      let modelIn: number = +JSON.stringify(input);
+      modelPred(modelIn);
     })
     .catch((err) => {
       console.error(err);

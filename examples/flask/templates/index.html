@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <link
+            href="{{url_for('static', filename = 'style.css')}}"
+            rel="stylesheet"
+        />
+        <script
+            src="{{url_for('static', filename = 'example-data.js')}}"
+            defer
+        ></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"
+            defer
+        ></script>
+        <script
+            src="{{url_for('static', filename = 'script.js')}}"
+            defer
+        ></script>
+    </head>
+    <body>
+        <h3>WEPCO</h3>
+        <div>
+            <p>Prediction result:</p>
+            <p id="prediction"></p>
+        </div>
+    </body>
+</html>

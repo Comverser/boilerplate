@@ -1,0 +1,12 @@
+body {
+    background-color: darkolivegreen;
+    color: white;
+}
+
+div {
+    display: flex;
+}
+
+p {
+    margin-right: 10px;
+}

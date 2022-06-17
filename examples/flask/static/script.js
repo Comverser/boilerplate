@@ -1,9 +1,9 @@
 // SYSTEM PARAMS
 const LIFE_CYCLES = 3000; // battery life
 const SAMPLE_PER_DAY = 1000; // sampling rate
-const MIN_V = 3.7 * 4; //14.8 V
-const MAX_V = 3.9 * 4; //15.6 V
-const COEFF = 6.59; // gain
+const MIN_V = 12; //14.8 V
+const MAX_V = 17; //15.6 V
+const COEFF = 500; // gain
 
 var getParams = function (data) {
     // system params
@@ -34,6 +34,7 @@ var getParams = function (data) {
                 (elem[2] === latestDay && elem[3] <= endTime))
         );
     });
+    console.log(filteredData);
     // the latest data by unique voltage
     var tempDict = {};
     var latestUniq = [];
@@ -94,7 +95,17 @@ var modelPred = function (input) {
 var run = async function (data) {
     var params = getParams(data);
     var input = params.input;
-    var modelIn = +input; // example value of -40
+    var modelIn = +input; // values should be between -43 to -80
+    while (modelIn > -43 || modelIn < -63) {
+        console.log("from", modelIn);
+        if (modelIn > -43) {
+            modelIn -= 10;
+            console.log(modelIn);
+        } else if (modelIn < -63) {
+            modelIn += 10;
+            console.log(modelIn);
+        }
+    }
     var cycles = +(await modelPred(modelIn));
     var result = 100 - (cycles / LIFE_CYCLES) * 100;
     if (result > 0) {

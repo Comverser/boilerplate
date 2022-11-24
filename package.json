@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsc -w & ts-node-dev --respawn --transpile-only src/server.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "start": "ts-node src/server.ts"
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
@@ -17,6 +18,7 @@
     "@tensorflow/tfjs": "^3.11.0",
     "@tensorflow/tfjs-node": "^3.11.0",
     "dotenv": "^10.0.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "ts-node": "^10.9.1"
   }
 }
